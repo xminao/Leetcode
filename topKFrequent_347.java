@@ -1,7 +1,4 @@
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class topKFrequent_347 {
     /**
@@ -16,7 +13,8 @@ public class topKFrequent_347 {
      * 输出: [1,2]
      *
      * 解法：
-     *      创建一个映射整数值到计数的散列表，使用优先队列返回前k个值即可。
+     *      1. 创建一个映射整数值到计数的散列表，使用优先队列返回前k个值即可。（Java实现）
+     *      2. 维护一个nums同长数组，索引值为计数，数组内容为整数值数组。(维护一个bucket，Python思路，Java实现复杂)
      */
     public static int[] topKFrequent(int[] nums, int k) {
         if (nums == null || nums.length == 0 || k < 1) return null;
