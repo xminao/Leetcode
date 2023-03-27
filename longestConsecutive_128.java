@@ -17,6 +17,7 @@ public class longestConsecutive_128 {
      * 解法：
      *      维护一个Set，遍历nums，每当数字在Set中就遍历它的左侧连续数字和右侧连续数字是否在Set集合中，在就计数+1，并从Set中删除。
      *      为什么计数后要删除？因为如果不删除，当遍历到这数字后得到的结果重复。
+     *
      */
     public int longestConsecutive(int[] nums) {
         HashSet<Integer> set = new HashSet<>();
