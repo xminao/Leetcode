@@ -1,5 +1,5 @@
 
-public class twoSum {
+public class twoSum_167 {
     /**
      * 167. 两数之和 II - 输入有序数组
      * 给你一个下标从 1 开始的整数数组 numbers ，该数组已按 非递减顺序排列  ，请你从数组中找出满足相加之和等于目标数 target 的两个数。如果设这两个数分别是 numbers[index1] 和 numbers[index2] ，则 1 <= index1 < index2 <= numbers.length 。
@@ -19,8 +19,8 @@ public class twoSum {
      *
      * 解法：
      *      双指针，两指针之和 == target：找到结果
-     *            两指针之和 > target，向左移动右指针
-     *            两指针之和 < target，向右移动左指针。
+     *            两指针之和 > target，需要减小值，向左移动右指针
+     *            两指针之和 < target，需要增大值，向右移动左指针。
      */
     public static int[] twoSum(int[] numbers, int target) {
         int lo = 0;
