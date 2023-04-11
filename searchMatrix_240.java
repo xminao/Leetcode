@@ -14,6 +14,7 @@ public class searchMatrix_240 {
      *      直到找到或者遍历完整个二维数组。
      */
     public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix.length == 0) return false;
         int N = matrix.length;
         int M = matrix[0].length;
         // lower left corner
