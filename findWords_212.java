@@ -2,73 +2,73 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 212. 单词搜索 II
+ * 给定一个 m x n 二维字符网格 board 和一个单词（字符串）列表 words， 返回所有二维网格上的单词 。
+ *
+ * 单词必须按照字母顺序，通过 相邻的单元格 内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母在一个单词中不允许被重复使用。
+ *
+ * 解法：
+ *      构建字典树
+ *      遍历数组
+ */
 public class findWords_212 {
-    private int m;
-    private int n;
     public List<String> findWords(char[][] board, String[] words) {
         List<String> result = new ArrayList<>();
-        m = board.length;
-        n = board[0].length;
-        int[][] visited = new int[m][n];
-        root = new TreeNode();
-        for (String str : words) {
-            addWord(str);
-        }
-
-        for (int i = 0; i < m; i += 1) {
-            for (int k = 0; k < n; k += 1) {
-                search(board, visited, 0, 0, result, root);
+        TrieNode root = buildTrie(words);
+        for (int i = 0; i < board.length; i += 1) {
+            for (int k = 0; k < board[0].length; k += 1) {
+                dfs(board, i, k, root, result);
             }
         }
         return result;
     }
 
-    private void search(char[][] board, int[][] visited, int row, int col, List<String> result, TreeNode node) {
-        // 判断是否越界或者已经访问
-        if (row < 0 || row >= m || col < 0 || col >= n || visited[row][col] == -1) {
-            return;
-        }
-        int c = board[row][col] - 'a';
-        node = node.children[c];
-        if (node == null) return;
-
-        visited[row][col] = -1;
-        if (node.isWord) {
-            result.add(node.val);
-            node.isWord = false; // 防止重复
+    private void dfs(char[][] board, int i, int j, TrieNode node, List<String> result) {
+        char c = board[i][j];
+        // 如果访问过或者字典树中不存在
+        if (c == '#' || node.next[c - 'a'] == null) return;
+        node = node.next[c - 'a'];
+        // 如果在字典树中是一个单词，添加到结果集
+        if (node.word != null) {
+            result.add(node.word);
+            node.word = null; // 防止重复
         }
 
-        search(board, visited, row + 1, col, result, node); // 下
-        search(board, visited, row - 1, col, result, node); // 上
-        search(board, visited, row, col + 1, result, node); // 右
-        search(board, visited, row, col - 1, result, node); // 左
-        visited[row][col] = 0;
-    }
-    // 字典树
-    private class TreeNode {
-        String val;
-        boolean isWord;
-        TreeNode[] children;
-        public TreeNode() {
-            val = null;
-            isWord = false;
-            children = new TreeNode[26];
-        }
+        // 遍历四个方向
+        board[i][j] = '#'; // 将当前节点设为访问过
+        if (i > 0) dfs(board, i - 1, j, node, result);
+        if (j > 0) dfs(board, i, j - 1, node, result);
+        if (i < board.length - 1) dfs(board, i + 1, j, node, result);
+        if (j < board[0].length - 1) dfs(board, i, j + 1, node, result);
+        board[i][j] = c; // 复原以便下一次遍历
     }
 
-    private TreeNode root;
-
-    private void addWord(String word) {
-        TreeNode node = root;
-        for (int i = 0; i < word.length(); i += 1) {
-            int c = word.charAt(i) - 'a';
-            if (node.children[c] == null) {
-                node.children[c] = new TreeNode();
+    // 构建字典树
+    private TrieNode buildTrie(String[] words) {
+        TrieNode root = new TrieNode();
+        for (String w : words) {
+            TrieNode node = root;
+            for (char c : w.toCharArray()) {
+                int i = c - 'a';
+                if (node.next[i] == null) {
+                    node.next[i] = new TrieNode();
+                }
+                node = node.next[i];
             }
-            node = node.children[c];
+            node.word = w;
         }
-        node.isWord = true;
-        node.val = word;
+        return root;
+    }
+
+    // 字典树节点
+    private class TrieNode {
+        String word;
+        TrieNode[] next;
+        public TrieNode() {
+            word = null;
+            next = new TrieNode[26];
+        }
     }
 
 }
